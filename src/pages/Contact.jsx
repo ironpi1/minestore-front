@@ -5,7 +5,7 @@ import Text from '../components/atoms/Text';
 import Button from '../components/atoms/Button';
 
 function Contact() {
-    // Estado inicial basado en los IDs de los inputs
+
     const initialFormData = {
         name: '',
         email: '',
@@ -37,13 +37,11 @@ function Contact() {
         },
     ];
 
-    // Manejar el envío del formulario
     const handleSubmit = () => {
         const message = `Nombre: ${formData.name}\nCorreo: ${formData.email}\nMensaje: ${formData.mensaje}`;
         alert(message);
     };
 
-    // Manejar la limpieza del formulario
     const handleClear = () => {
         setFormData(initialFormData);
     };

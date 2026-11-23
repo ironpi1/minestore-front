@@ -6,7 +6,6 @@
 @import './pages/Admin.css';
 @import './pages/Home.css';
 @import './pages/ProductDetail.css';
-
 :root {
 	--bs-body-color: #b1b0b0;
 	--bs-body-bg: #222222;
@@ -34,6 +33,13 @@ body {
 	min-height: 100vh;
 }
 
+
+h1.container{
+	color: #b1b0b0;
+	font-family: 'Minecraft', sans-serif;
+	text-align: center;
+	margin-top: 20px;
+}
 h1,
 h2,
 h3,
@@ -45,6 +51,7 @@ input,
 textarea,
 select {
 	font-family: 'Minecraft', sans-serif;
+	color: #ffffff;
 }
 
 @media (max-width: 576px) {
