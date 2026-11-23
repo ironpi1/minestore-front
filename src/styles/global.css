@@ -1,4 +1,13 @@
- :root {
+@import './atoms/Button.css';
+@import './atoms/Input.css';
+@import './molecules/CardBody.css';
+@import './organisms/NavBar.css';
+@import './organisms/ProductCard.css';
+@import './pages/Admin.css';
+@import './pages/Home.css';
+@import './pages/ProductDetail.css';
+
+:root {
 	--bs-body-color: #b1b0b0;
 	--bs-body-bg: #222222;
 	--minecraft-green: green;
@@ -38,160 +47,8 @@ select {
 	font-family: 'Minecraft', sans-serif;
 }
 
-.navbar {
-	flex-wrap: wrap;
-	gap: 12px 18px;
-	padding: 10px 18px;
-	background-color: rgba(46, 45, 45, 0.9) !important;
-	border-bottom: 2px solid #058e15;
-}
-
-.navbar .navbar-brand,
-.navbar .navbar-nav .nav-link {
-	color: #f1f1f1;
-	font-family: 'Minecraft', sans-serif;
-	text-decoration: none;
-}
-
-.navbar .navbar-brand {
-	font-size: 18px;
-}
-
-.navbar .navbar-nav .nav-link {
-	font-size: 14px;
-}
-
-.navbar .navbar-nav .nav-link:hover,
-.navbar .navbar-nav .nav-link:focus {
-	color: #8bc34a;
-}
-
-.card {
-	color: #b1b0b0;
-	background-color: #222222;
-	border: 2px solid green;
-	border-radius: 0;
-	align-items: center;
-}
-
-.minecraft-product-card {
-	width: 250px;
-	text-align: center;
-}
-
-.minecraft-product-card .card-body {
-	font-size: 16px;
-}
-
-.minecraft-product-card .card-body h5 {
-	font-size: 18px;
-}
-
-.minecraft-product-card .card-img-top {
-	height: 120px;
-	margin-top: 10px;
-	padding: 6px;
-	object-fit: contain;
-}
-
-.minecraft-detail .card-img-top {
-	max-height: 240px;
-	padding: 16px;
-	object-fit: contain;
-}
-
-.mine-home {
-	max-width: 900px;
-	padding: 32px 24px;
-	background: rgba(34, 34, 34, 0.82);
-	border: 2px solid green;
-	border-radius: 0;
-	box-shadow: 4px 4px 0 rgba(0, 128, 0, 0.35);
-}
-
-
-.btn {
-	border: 1px solid green;
-	border-radius: 0;
-	background-color: green;
-	color: #ffffff;
-}
-
-.btn:hover,
-.btn:focus-visible {
-	border-color: #006400;
-	background-color: #006400;
-	color: #ffffff;
-}
-
-.form-label {
-	color: #b1b0b0;
-}
-
-.form-control,
-.form-select {
-	color: #b1b0b0;
-	background-color: #222222;
-	border: 1px solid green;
-	border-radius: 0;
-}
-
-.form-control:focus,
-.form-select:focus {
-	color: #b1b0b0;
-	background-color: #222222;
-	border-color: green;
-	box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.25);
-}
-
-.form-control::placeholder {
-	color: #b1b0b0;
-	opacity: 0.7;
-}
-
-.table {
-	--bs-table-color: #b1b0b0;
-	--bs-table-bg: #222222;
-	--bs-table-border-color: green;
-	--bs-table-striped-bg: #2d2d2d;
-	--bs-table-striped-color: #ffffff;
-	--bs-table-hover-bg: #383838;
-	--bs-table-hover-color: #ffffff;
-	color: #ffffff;
-}
-
-.table thead th {
-	color: #ffffff;
-	background-color: #171717;
-	border: 2px solid #42a34a;
-	font-weight: 700;
-	text-align: center;
-	vertical-align: middle;
-}
-
-.table tbody td {
-	color: #ffffff;
-	background-color: transparent;
-	border: 1px solid #42a34a;
-	text-align: center;
-	vertical-align: middle;
-	font-weight: 600;
-}
-
-.table tbody tr {
-	background-color: #222222;
-}
-
 @media (max-width: 576px) {
 	body {
 		font-size: 15px;
-	}
-
-	.navbar {
-		padding: 10px 12px;
-	}
-
-	.minecraft-product-card {
-		width: min(250px, 100%);
 	}
 }

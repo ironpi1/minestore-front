@@ -1,0 +1,32 @@
+.table {
+	--bs-table-color: #b1b0b0;
+	--bs-table-bg: #222222;
+	--bs-table-border-color: green;
+	--bs-table-striped-bg: #2d2d2d;
+	--bs-table-striped-color: #ffffff;
+	--bs-table-hover-bg: #383838;
+	--bs-table-hover-color: #ffffff;
+	color: #ffffff;
+}
+
+.table thead th {
+	color: #ffffff;
+	background-color: #171717;
+	border: 2px solid #42a34a;
+	font-weight: 700;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.table tbody td {
+	color: #ffffff;
+	background-color: transparent;
+	border: 1px solid #42a34a;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: 600;
+}
+
+.table tbody tr {
+	background-color: #222222;
+}
