@@ -1,0 +1,13 @@
+.btn {
+	border: 1px solid green;
+	border-radius: 0;
+	background-color: green;
+	color: #ffffff;
+}
+
+.btn:hover,
+.btn:focus-visible {
+	border-color: #006400;
+	background-color: #006400;
+	color: #ffffff;
+}
