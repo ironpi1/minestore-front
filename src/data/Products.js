@@ -60,7 +60,7 @@ const loadProductsFromStorage = () => {
   if (saved) {
     try {
       return JSON.parse(saved);
-    } catch (e) {
+    } catch {
       return [...initialProducts];
     }
   }
@@ -119,4 +119,22 @@ export const deleteItem = (id) => {
   products = products.filter((item) => item.id !== Number(id));
   saveProductsToStorage(products);
   return products.length < initialLength;
+};
+
+export const decreaseStock = (items) => {
+  const products = loadProductsFromStorage();
+
+  items.forEach(({ productId, cantidad }) => {
+    const product = products.find((item) => item.id === Number(productId));
+    if (!product || Number(product.stock) < Number(cantidad)) {
+      throw new Error('Stock insuficiente para completar la compra.');
+    }
+  });
+
+  items.forEach(({ productId, cantidad }) => {
+    const product = products.find((item) => item.id === Number(productId));
+    product.stock = Number(product.stock) - Number(cantidad);
+  });
+
+  saveProductsToStorage(products);
 };

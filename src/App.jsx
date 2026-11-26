@@ -6,6 +6,8 @@ import Contact from './pages/Contact'
 import ProductDetail from './pages/ProductDetail'
 import Admin from './pages/Admin'
 import Register from './pages/Register'
+import Checkout from './pages/Checkout'
+import CartDrawer from './components/organisms/CartDrawer'
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
+      <CartDrawer />
     </>
   )
 }

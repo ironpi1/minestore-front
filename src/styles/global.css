@@ -3,6 +3,7 @@
 @import './molecules/CardBody.css';
 @import './organisms/NavBar.css';
 @import './organisms/ProductCard.css';
+@import './organisms/Cart.css';
 @import './pages/Admin.css';
 @import './pages/Home.css';
 @import './pages/ProductDetail.css';

@@ -1,7 +1,9 @@
-import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { useCart } from '../../hooks/useCart';
 
 function NavBar() {
+  const { totalItems, openCart } = useCart();
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
@@ -14,6 +16,17 @@ function NavBar() {
             <Nav.Link href="/contact">Contacto</Nav.Link>
             <Nav.Link href="/admin">Administración</Nav.Link>
             <Nav.Link href="/register">Registro</Nav.Link>
+          </Nav>
+          <Nav>
+            <Nav.Link
+              as="button"
+              type="button"
+              className="btn btn-link"
+              onClick={openCart}
+              aria-label={`Abrir carrito, ${totalItems} productos`}
+            >
+              🛒 Carrito<span className="cart-badge">{totalItems}</span>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
