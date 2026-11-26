@@ -1,0 +1,92 @@
+.mine-cart {
+	color: #b1b0b0;
+	background-color: #222222;
+	border-left: 2px solid green;
+	font-family: 'Minecraft', sans-serif;
+}
+
+.mine-cart .offcanvas-header {
+	border-bottom: 2px solid green;
+}
+
+.mine-cart .offcanvas-title {
+	color: #ffffff;
+	font-family: 'Minecraft', sans-serif;
+}
+
+.mine-cart__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.mine-cart__item {
+	display: flex;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid #42a34a;
+}
+
+.mine-cart__img {
+	width: 56px;
+	height: 56px;
+	padding: 4px;
+	object-fit: contain;
+	border: 1px solid green;
+}
+
+.mine-cart__remove {
+	margin-top: 6px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #b1b0b0;
+	font-size: 13px;
+	text-decoration: underline;
+}
+
+.mine-cart__remove:hover {
+	color: #ffffff;
+}
+
+.mine-cart__footer {
+	padding-top: 12px;
+	border-top: 2px solid green;
+}
+
+.qty {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid green;
+	background-color: #171717;
+}
+
+.qty button {
+	width: 30px;
+	height: 30px;
+	border: 0;
+	background: transparent;
+	color: #ffffff;
+}
+
+.qty button:hover:not(:disabled) {
+	background-color: #006400;
+}
+
+.qty button:disabled {
+	color: #555555;
+}
+
+.qty span {
+	min-width: 28px;
+	color: #ffffff;
+	text-align: center;
+}
+
+.cart-badge {
+	margin-left: 6px;
+	padding: 1px 7px;
+	background-color: green;
+	color: #ffffff;
+	font-size: 12px;
+}
