@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Alert, Container, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
 import Text from '../components/atoms/Text';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 import { AUTH_LOGIN_ENDPOINT } from '../services/endpoints';
 import { getApiErrorMessage } from '../utils/errors';
+import { isAdminRole } from '../utils/roles';
 
 function getRole(data) {
   const role = data.rol ?? data.role;
@@ -24,6 +25,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
 
   function handleChange(event) {
@@ -45,8 +47,12 @@ function Login() {
         throw new Error('El servidor no devolvió un token de acceso.');
       }
 
-      login({ token, role: getRole(data) });
-      navigate('/');
+      const role = getRole(data);
+      login({ token, role });
+      const destination = isAdminRole(role)
+        ? location.state?.from?.pathname || '/'
+        : '/';
+      navigate(destination);
     } catch (error) {
       setErrorMessage(getApiErrorMessage(
         error,

@@ -9,6 +9,7 @@ import Register from './pages/Register'
 import Checkout from './pages/Checkout'
 import CartDrawer from './components/organisms/CartDrawer'
 import Login from './pages/Login'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/admin"
+          element={(
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          )}
+        />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/checkout" element={<Checkout />} />
