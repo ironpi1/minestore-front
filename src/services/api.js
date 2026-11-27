@@ -2,7 +2,9 @@ import axios from 'axios';
 import { getStoredAuth } from '../utils/storage';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://minestore-back.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL
+    || import.meta.env.VITE_API_BASE_URL
+    || 'https://minestore-back.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
