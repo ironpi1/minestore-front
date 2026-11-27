@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
 import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import CardBody from '../molecules/CardBody';
@@ -15,6 +15,11 @@ function ProductCard({ product }) {
     <Card className="m-2 minecraft-product-card">
       <Image src={product.imagen} alt={product.nombre} className="card-img-top" />
       <Card.Body>
+        {product.unitsSold > 0 && (
+          <Badge bg="success" className="mb-2">
+            {product.unitsSold} vendidos
+          </Badge>
+        )}
         <CardBody
           title={product.nombre}
           categoria={product.categoria}
