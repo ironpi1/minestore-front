@@ -1,8 +1,11 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
+import { useAuth } from '../../hooks/useAuth';
 
 function NavBar() {
   const { totalItems, openCart } = useCart();
+  const { isAuthenticated, role, logout } = useAuth();
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -18,6 +21,18 @@ function NavBar() {
             <Nav.Link href="/register">Registro</Nav.Link>
           </Nav>
           <Nav>
+            {isAuthenticated ? (
+              <>
+                <Navbar.Text className="me-3">
+                  Sesión iniciada{role ? ` · ${role}` : ''}
+                </Navbar.Text>
+                <Nav.Link as="button" type="button" className="btn btn-link" onClick={logout}>
+                  Cerrar sesión
+                </Nav.Link>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/login">Iniciar sesión</Nav.Link>
+            )}
             <Nav.Link
               as="button"
               type="button"
