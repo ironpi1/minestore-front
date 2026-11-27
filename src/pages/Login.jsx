@@ -1,68 +1,108 @@
-import React, {useState} from 'react';
-import { Container } from 'react-bootstrap';
-import DynamicForm from '../components/molecules/DynamicForm';
-import Text from '../components/atoms/Text';
+import { useState } from 'react';
+import { Alert, Container, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
+import Text from '../components/atoms/Text';
+import { useAuth } from '../hooks/useAuth';
+import api from '../services/api';
+import { AUTH_LOGIN_ENDPOINT } from '../services/endpoints';
 
-function Contact() {
-    // Estado inicial basado en los IDs de los inputs
-    const initialFormData = {
-        name: '',
-        email: '',
-        mensaje: '',
-    };
-
-    const [formData, setFormData] = useState(initialFormData);
-
-    const formInputs = [
-        {id: 'name',type: 'text',label: 'Nombre',placeholder: 'Ingresa tu nombre',value: formData.name,
-            onChange: (e) => setFormData({ ...formData, name: e.target.value }),
-        },
-        {
-            id: 'email',
-            type: 'email',
-            label: 'Correo',
-            placeholder: 'Ingresa tu correo',
-            value: formData.email,
-            onChange: (e) => setFormData({ ...formData, email: e.target.value }),
-        },
-        {
-            id: 'mensaje',
-            type: 'textarea',
-            label: 'Mensaje',
-            placeholder: 'Ingrese el mensaje',
-            rows: 3,
-            value: formData.mensaje,
-            onChange: (e) => setFormData({ ...formData, mensaje: e.target.value }),
-        },
-    ];
-
-    // Manejar el envío del formulario
-    const handleSubmit = () => {
-        const message = `Nombre: ${formData.name}\nCorreo: ${formData.email}\nMensaje: ${formData.mensaje}`;
-        alert(message);
-    };
-
-    // Manejar la limpieza del formulario
-    const handleClear = () => {
-        setFormData(initialFormData);
-    };
-
-    return (
-        <Container className="my-5">
-            <Text variant="h1">Contacto</Text>
-            <Text variant="p">Llena el formulario para poder contactarte</Text>
-            <DynamicForm inputs={formInputs} />
-            <div className="mt-3">
-                <Button variant="primary" onClick={handleSubmit} className="me-2">
-                    Enviar
-                </Button>
-                <Button variant="secondary" onClick={handleClear}>
-                    Limpiar
-                </Button>
-            </div>
-        </Container>
-    );
+function getLoginError(error) {
+  const responseData = error.response?.data;
+  return responseData?.message
+    || responseData?.mensaje
+    || responseData?.error
+    || 'No se pudo iniciar sesión. Revisa tus datos e inténtalo nuevamente.';
 }
 
-export default Contact;
+function getRole(data) {
+  const role = data.rol ?? data.role;
+  if (typeof role === 'string') return role;
+  if (typeof role?.nombre === 'string') return role.nombre;
+  if (typeof role?.name === 'string') return role.name;
+  return null;
+}
+
+function Login() {
+  const [credentials, setCredentials] = useState({
+    correo_electronico: '',
+    contrasena: '',
+  });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setCredentials((current) => ({ ...current, [name]: value }));
+    setErrorMessage('');
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      const { data } = await api.post(AUTH_LOGIN_ENDPOINT, credentials);
+      const token = data?.token ?? data?.accessToken ?? data?.access_token ?? data?.jwt;
+
+      if (typeof token !== 'string' || !token) {
+        throw new Error('El servidor no devolvió un token de acceso.');
+      }
+
+      login({ token, role: getRole(data) });
+      navigate('/');
+    } catch (error) {
+      setErrorMessage(error.response ? getLoginError(error) : error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <Container className="my-5 mine-home" style={{ maxWidth: '520px' }}>
+      <Text variant="h1">Iniciar sesión</Text>
+      <Text variant="p">Ingresa con tu correo electrónico y contraseña.</Text>
+
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="login-email">
+          <Form.Label>Correo electrónico</Form.Label>
+          <Form.Control
+            type="email"
+            name="correo_electronico"
+            autoComplete="email"
+            value={credentials.correo_electronico}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="login-password">
+          <Form.Label>Contraseña</Form.Label>
+          <Form.Control
+            type="password"
+            name="contrasena"
+            autoComplete="current-password"
+            value={credentials.contrasena}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        {errorMessage && (
+          <Alert variant="danger" role="alert">
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Ingresando…' : 'Iniciar sesión'}
+        </Button>
+      </Form>
+    </Container>
+  );
+}
+
+export default Login;
