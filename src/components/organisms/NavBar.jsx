@@ -2,6 +2,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
 import { useAuth } from '../../hooks/useAuth';
+import { isAdminRole } from '../../utils/roles';
 
 function NavBar() {
   const { totalItems, openCart } = useCart();
@@ -17,7 +18,9 @@ function NavBar() {
             <Nav.Link href="/">Inicio</Nav.Link>
             <Nav.Link href="/products">Productos</Nav.Link>
             <Nav.Link href="/contact">Contacto</Nav.Link>
-            <Nav.Link href="/admin">Administración</Nav.Link>
+            {isAdminRole(role) && (
+              <Nav.Link as={Link} to="/admin">Administración</Nav.Link>
+            )}
             <Nav.Link href="/register">Registro</Nav.Link>
           </Nav>
           <Nav>
