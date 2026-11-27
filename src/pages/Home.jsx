@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Alert, Container, Row, Spinner } from 'react-bootstrap';
 import ProductCard from '../components/organisms/ProductCard';
 import Text from '../components/atoms/Text';
-import { getItems } from '../data/Products';
 import { getBestSellingProducts, ORDERS_UPDATED_EVENT } from '../services/orders';
+import { getProducts } from '../services/products';
+import { getApiErrorMessage } from '../utils/errors';
 
-function getHomeSection() {
-  const products = getItems();
+function getHomeSection(products) {
   const bestSellers = getBestSellingProducts(products);
 
   if (bestSellers.length > 0) {
@@ -25,21 +25,44 @@ function getHomeSection() {
 }
 
 function Home() {
-  const [section, setSection] = useState(getHomeSection);
+  const [products, setProducts] = useState([]);
+  const [status, setStatus] = useState('loading');
+  const [errorMessage, setErrorMessage] = useState('');
+  const section = getHomeSection(products);
 
   useEffect(() => {
-    const refreshSection = () => setSection(getHomeSection());
-    const handleStorage = (event) => {
-      if (event.key === 'mine_orders' || event.key === 'mine_products') {
-        refreshSection();
+    let isMounted = true;
+
+    async function loadProducts() {
+      try {
+        const availableProducts = await getProducts();
+        if (isMounted) {
+          setProducts(availableProducts);
+          setStatus('success');
+        }
+      } catch (error) {
+        if (isMounted) {
+          setErrorMessage(getApiErrorMessage(
+            error,
+            'No se pudieron cargar los productos. Inténtalo más tarde.'
+          ));
+          setStatus('error');
+        }
       }
+    }
+
+    const refreshBestSellers = () => setProducts((current) => [...current]);
+    const handleStorage = (event) => {
+      if (event.key === 'mine_orders') refreshBestSellers();
     };
 
-    window.addEventListener(ORDERS_UPDATED_EVENT, refreshSection);
+    loadProducts();
+    window.addEventListener(ORDERS_UPDATED_EVENT, refreshBestSellers);
     window.addEventListener('storage', handleStorage);
 
     return () => {
-      window.removeEventListener(ORDERS_UPDATED_EVENT, refreshSection);
+      isMounted = false;
+      window.removeEventListener(ORDERS_UPDATED_EVENT, refreshBestSellers);
       window.removeEventListener('storage', handleStorage);
     };
   }, []);
@@ -55,21 +78,34 @@ function Home() {
 
       <section className="mt-5" aria-label={section.title}>
         <Text variant="h2" className="text-center">
-          {section.title}
+          {status === 'success' ? section.title : 'Productos'}
         </Text>
-        <Text variant="p" className="text-center">
-          {section.description}
-        </Text>
-        {section.products.length > 0 ? (
-          <Row className="justify-content-center">
-            {section.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </Row>
-        ) : (
-          <Text variant="p" className="text-center">
-            Pronto habrá nuevos productos disponibles.
-          </Text>
+        {status === 'loading' && (
+          <div className="text-center" role="status">
+            <Spinner animation="border" />
+            <span className="visually-hidden">Cargando productos…</span>
+          </div>
+        )}
+        {status === 'error' && (
+          <Alert variant="danger" role="alert">{errorMessage}</Alert>
+        )}
+        {status === 'success' && (
+          <>
+            <Text variant="p" className="text-center">
+              {section.description}
+            </Text>
+            {section.products.length > 0 ? (
+              <Row className="justify-content-center">
+                {section.products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </Row>
+            ) : (
+              <Text variant="p" className="text-center">
+                Pronto habrá nuevos productos disponibles.
+              </Text>
+            )}
+          </>
         )}
       </section>
     </Container>
