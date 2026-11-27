@@ -6,14 +6,7 @@ import Text from '../components/atoms/Text';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 import { AUTH_LOGIN_ENDPOINT } from '../services/endpoints';
-
-function getLoginError(error) {
-  const responseData = error.response?.data;
-  return responseData?.message
-    || responseData?.mensaje
-    || responseData?.error
-    || 'No se pudo iniciar sesión. Revisa tus datos e inténtalo nuevamente.';
-}
+import { getApiErrorMessage } from '../utils/errors';
 
 function getRole(data) {
   const role = data.rol ?? data.role;
@@ -55,7 +48,10 @@ function Login() {
       login({ token, role: getRole(data) });
       navigate('/');
     } catch (error) {
-      setErrorMessage(error.response ? getLoginError(error) : error.message);
+      setErrorMessage(getApiErrorMessage(
+        error,
+        'No se pudo iniciar sesión. Revisa tus datos e inténtalo nuevamente.'
+      ));
     } finally {
       setIsSubmitting(false);
     }

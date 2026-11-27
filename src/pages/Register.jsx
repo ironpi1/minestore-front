@@ -9,29 +9,7 @@ import {
   ROLES_ENDPOINT,
   USER_REGISTER_ENDPOINT,
 } from '../services/endpoints';
-
-function getRegisterError(error) {
-  const responseData = error.response?.data;
-  const serverMessage = typeof responseData === 'string'
-    ? responseData
-    : [
-      responseData?.message,
-      responseData?.mensaje,
-      responseData?.error,
-      responseData?.detail,
-      responseData?.title,
-    ].find((message) => typeof message === 'string' && message.trim());
-
-  if (serverMessage) return serverMessage;
-  if (error.response?.status === 400) {
-    return 'Revisa los datos ingresados e inténtalo nuevamente.';
-  }
-  if (error.response) return 'No se pudo crear la cuenta. Inténtalo más tarde.';
-  if (error.request) {
-    return 'No se pudo conectar. Revisa tu conexión e inténtalo nuevamente.';
-  }
-  return 'No se pudo crear la cuenta. Inténtalo nuevamente.';
-}
+import { getApiErrorMessage } from '../utils/errors';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -81,7 +59,10 @@ function Register() {
         }
       } catch (error) {
         if (isMounted) {
-          setOptionsError(getRegisterError(error));
+          setOptionsError(getApiErrorMessage(
+            error,
+            'No se pudieron cargar las opciones. Inténtalo más tarde.'
+          ));
         }
       } finally {
         if (isMounted) {
@@ -144,7 +125,13 @@ function Register() {
         message: 'Cuenta creada correctamente. Ya puedes iniciar sesión.',
       });
     } catch (error) {
-      setFeedback({ variant: 'danger', message: getRegisterError(error) });
+      setFeedback({
+        variant: 'danger',
+        message: getApiErrorMessage(
+          error,
+          'No se pudo crear la cuenta. Revisa tus datos e inténtalo nuevamente.'
+        ),
+      });
     } finally {
       setIsSubmitting(false);
     }
